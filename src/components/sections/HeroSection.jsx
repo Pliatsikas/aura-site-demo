@@ -3,7 +3,7 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 // ΕΔΩ ΕΙΝΑΙ Η ΑΛΛΑΓΗ: Πλέον κάνουμε import το νέο LiquidEther
-import LiquidEther from '@/components/webgl/LiquidEther'; 
+import LiquidEther from '@/components/webgl/LiquidEther';
 import MagneticButton from '@/components/ui/MagneticButton';
 import { useAuraStore } from '@/store/useAuraStore';
 
@@ -14,12 +14,12 @@ const WORD_TRANSITION = (i) => ({
 
 export default function HeroSection() {
   const containerRef = useRef(null);
-  
+
   const activeProjectMood = useAuraStore((s) => s.activeProjectMood);
-  
-  const etherColors = activeProjectMood 
+
+  const etherColors = activeProjectMood
     ? [activeProjectMood.colorA, activeProjectMood.colorB, activeProjectMood.colorAccent]
-    : ['#02020a', '#0e0520', '#c9a84c'];
+    : ['#5227ff', '#ff9ffc', '#b497cf'];
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -30,9 +30,9 @@ export default function HeroSection() {
 
   return (
     <section ref={containerRef} className="relative h-[100svh] w-full overflow-hidden bg-void">
-      
+
       <div className="absolute inset-0 z-0 opacity-80" aria-hidden>
-        <LiquidEther 
+        <LiquidEther
           colors={etherColors}
           mouseForce={20}
           cursorSize={100}

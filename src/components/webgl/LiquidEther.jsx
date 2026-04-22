@@ -143,6 +143,10 @@ export default function LiquidEther({
         this.isHoverInside = true;
         this.setCoords(event.clientX, event.clientY);
         this.hasUserControl = true;
+        clearTimeout(this.idleTimer);
+        this.idleTimer = setTimeout(() => {
+          this.hasUserControl = false;
+        }, 1500);
       }
       update() {
         this.diff.subVectors(this.coords, this.coords_old);
@@ -215,10 +219,23 @@ export default function LiquidEther({
         this.advection.material.uniforms.velocity.value = this.fbos.vel_0.texture;
         this.advection.update();
 
-        const forceX = (Mouse.diff.x / 2) * this.options.mouse_force;
-        const forceY = (Mouse.diff.y / 2) * this.options.mouse_force;
+        let forceX, forceY, centerX, centerY;
+        if (!Mouse.hasUserControl) {
+            const t = Common.time * this.options.auto_speed;
+            const radius = 0.3;
+            centerX = Math.cos(t) * radius;
+            centerY = Math.sin(t) * radius;
+            forceX = -Math.sin(t) * this.options.auto_intensity;
+            forceY = Math.cos(t) * this.options.auto_intensity;
+        } else {
+            forceX = (Mouse.diff.x / 2) * this.options.mouse_force;
+            forceY = (Mouse.diff.y / 2) * this.options.mouse_force;
+            centerX = Mouse.coords.x;
+            centerY = Mouse.coords.y;
+        }
+
         this.externalForce.material.uniforms.force.value.set(forceX, forceY);
-        this.externalForce.material.uniforms.center.value.set(Mouse.coords.x, Mouse.coords.y);
+        this.externalForce.material.uniforms.center.value.set(centerX, centerY);
         this.externalForce.update();
 
         this.divergence.material.uniforms.velocity.value = this.fbos.vel_1.texture;
@@ -257,7 +274,7 @@ export default function LiquidEther({
       constructor(props) {
         Common.init(props.$wrapper);
         Mouse.init(props.$wrapper);
-        this.sim = new Simulation({ mouse_force: mouseForce, cursor_size: cursorSize, dt, iterations_poisson: iterationsPoisson });
+        this.sim = new Simulation({ mouse_force: mouseForce, cursor_size: cursorSize, dt, iterations_poisson: iterationsPoisson, auto_speed: autoSpeed, auto_intensity: autoIntensity });
         this.output = new Output(this.sim);
         props.$wrapper.prepend(Common.renderer.domElement);
         this._loop = this.loop.bind(this);
