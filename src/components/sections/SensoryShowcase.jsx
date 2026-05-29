@@ -22,77 +22,13 @@
  *   })
  */
 
-import { useRef, useEffect } from 'react';
+import { useRef, useLayoutEffect } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useAuraStore, PROJECT_MOODS } from '@/store/useAuraStore';
+import { useAuraStore } from '@/store/useAuraStore';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// ─── Project data ─────────────────────────────────────────────────────────────
-const PROJECTS = [
-  {
-    id: 'cabin',
-    title: 'Solstice Cabin',
-    location: 'Åre, Sweden',
-    year: '2024',
-    category: 'Residential',
-    description:
-      'Where raw timber meets the silence of arctic winters. Warmth distilled into architecture.',
-    imageUrl: '/images/projects/cabin.jpg',
-    accentColor: '#d4813a',
-    tags: ['Timber', 'Nordic', 'Cozy'],
-  },
-  {
-    id: 'loft',
-    title: 'Obsidian Loft',
-    location: 'Tokyo, Japan',
-    year: '2024',
-    category: 'Commercial',
-    description:
-      'Polished concrete and negative space. The poetry of restraint at 43 floors above Shinjuku.',
-    imageUrl: '/images/projects/loft.jpg',
-    accentColor: '#4a93b8',
-    tags: ['Concrete', 'Minimal', 'Urban'],
-  },
-  {
-    id: 'villa',
-    title: 'Cielo Villa',
-    location: 'Positano, Italy',
-    year: '2023',
-    category: 'Residential',
-    description:
-      'Terracotta and azure. The Mediterranean sun captured in whitewashed stone.',
-    imageUrl: '/images/projects/villa.jpg',
-    accentColor: '#c76b3a',
-    tags: ['Mediterranean', 'Stone', 'Light'],
-  },
-  {
-    id: 'penthouse',
-    title: 'Eclipse Penthouse',
-    location: 'New York, USA',
-    year: '2024',
-    category: 'Residential',
-    description:
-      'Obsidian surfaces and city lights. Drama suspended between sky and stone.',
-    imageUrl: '/images/projects/penthouse.jpg',
-    accentColor: '#8b5cf6',
-    tags: ['Luxury', 'Dark', 'Dramatic'],
-  },
-  {
-    id: 'coastal',
-    title: 'Tide House',
-    location: 'Big Sur, California',
-    year: '2023',
-    category: 'Residential',
-    description:
-      'Sea glass and driftwood. The Pacific horizon becomes your fourth wall.',
-    imageUrl: '/images/projects/coastal.jpg',
-    accentColor: '#38b2ac',
-    tags: ['Ocean', 'Glass', 'Open'],
-  },
-];
 
 // ─── Individual Project Card ──────────────────────────────────────────────────
 function ProjectCard({ project, index }) {
@@ -235,11 +171,11 @@ function ProjectCard({ project, index }) {
 }
 
 // ─── Main Section ─────────────────────────────────────────────────────────────
-export default function SensoryShowcase() {
+export default function SensoryShowcase({ projects = [] }) {
   const sectionRef = useRef(null);
   const trackRef   = useRef(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!sectionRef.current || !trackRef.current) return;
 
     const cards     = trackRef.current.querySelectorAll('article');
@@ -294,7 +230,7 @@ export default function SensoryShowcase() {
           className="flex gap-10 will-change-transform"
           style={{ paddingLeft: '120px', paddingRight: '120px' }}
         >
-          {PROJECTS.map((project, i) => (
+          {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
           ))}
         </div>

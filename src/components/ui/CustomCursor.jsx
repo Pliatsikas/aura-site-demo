@@ -36,7 +36,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { useAuraStore } from '@/store/useAuraStore';
 
 // ─── Size & opacity by state ─────────────────────────────────────────────────
@@ -172,27 +172,23 @@ export default function CustomCursor() {
       />
 
       {/* ── "View" label (link state) ─────────────────────────────────────── */}
-      <AnimatePresence>
-        {cursorVariant === 'link' && (
-          <motion.span
-            key="cursor-label"
-            aria-hidden
-            className="pointer-events-none fixed left-0 top-0 z-[9997] font-mono text-[8px] tracking-[0.2em] text-white uppercase mix-blend-difference"
-            style={{
-              x: ringX,
-              y: ringY,
-              translateX: '-50%',
-              translateY: '-50%',
-            }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.15 }}
-          >
-            View
-          </motion.span>
-        )}
-      </AnimatePresence>
+      {cursorVariant === 'link' && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none fixed left-0 top-0 z-[9997] font-mono text-[8px] tracking-[0.2em] text-white uppercase mix-blend-difference"
+          style={{
+            x: ringX,
+            y: ringY,
+            translateX: '-50%',
+            translateY: '-50%',
+          }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.15 }}
+        >
+          View
+        </motion.span>
+      )}
     </>
   );
 }

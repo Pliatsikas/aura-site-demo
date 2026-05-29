@@ -16,8 +16,7 @@ export default function RootLayout({ children }) {
         <CustomCursor />
         
         <Providers>
-          {/* Δώσαμε ένα μοναδικό key στο main περιεχόμενο */}
-          <main key="main-content">{children}</main>
+          {children}
         </Providers>
         
       </body>

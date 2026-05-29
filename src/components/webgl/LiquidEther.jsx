@@ -324,6 +324,10 @@ export default function LiquidEther({
     return () => {
       ro.disconnect();
       webglRef.current.dispose();
+      // Do not remove the renderer DOM element directly; React will remove
+      // the container on unmount. Removing it here can race with React's
+      // cleanup and cause "removeChild" errors.
+      webglRef.current = null;
     };
   // ΠΡΟΣΟΧΗ: Το 'colors' έχει αφαιρεθεί από εδώ για να μην κάνει unmount!
   }, [cursorSize, dt, iterationsPoisson, mouseForce, resolution]); 
